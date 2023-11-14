@@ -15,15 +15,15 @@ let tray;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 800,
+    height: 600,
     webPreferences: { nodeIntegration: true, contextIsolation: false },
   });
   // and load the index.html of the app.
   console.log(__dirname);
   mainWindow.loadFile(path.join(__dirname, "../build/index.html"));4
    // Create a tray icon
-   tray = new Tray('./icon192.png'); // Replace with the path to your icon
+   tray = new Tray(path.join(__dirname, 'logo512.png')); // Replace with the path to your icon
    const contextMenu = Menu.buildFromTemplate([
      {
        label: 'Restore',
@@ -48,10 +48,10 @@ function createWindow() {
     mainWindow.hide();
   });
   // Listen for the visibility change event
-  app.on('browser-window-blur', () => {
-    // When the window loses focus (i.e., minimized or switched to another app), hide it
-    mainWindow.hide();
-  });
+  // app.on('browser-window-blur', () => {
+  //   // When the window loses focus (i.e., minimized or switched to another app), hide it
+  //   mainWindow.hide();
+  // });
 
   // Listen for the visibility change event
   app.on('browser-window-focus', () => {
@@ -64,12 +64,13 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
-  createWindow();
-  // Check for updates when the app is ready
-  checkForUpdates();
-});
+// app.on("ready", () => {
+//   createWindow();
+//   // Check for updates when the app is ready
+//   checkForUpdates();
+// });
 
+app.on("ready", createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

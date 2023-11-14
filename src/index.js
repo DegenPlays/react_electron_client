@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { HashRouter as Router } from 'react-router-dom';
+// import { HashRouter as Router } from 'react-router-dom';
+import { SocketProvider } from './components/SocketContext'; // Adjust the path
 // import HomePage from './components/HomePage';
 // import Header from './components/header'
 // import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
@@ -33,9 +34,9 @@ import { HashRouter as Router } from 'react-router-dom';
 const root = document.getElementById('root');
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
-    {/* <Router> */}
+    <SocketProvider>
       <App />
-    {/* </Router> */}
+    </SocketProvider>
   </React.StrictMode>
 );
 // root.render(

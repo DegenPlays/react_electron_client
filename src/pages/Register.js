@@ -2,67 +2,65 @@ import logo from '../logo.svg';
 import '../App.css';
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { useSocket } from '../components/SocketContext'; // Adjust the path
 
 
-export default function HomePage() {
-  const socket = useSocket();
+export default function Register() {
   // const [socket, setsocket] = useState(null);
   const [subscriptionStats, setSubscriptionStats] = useState(null);
-  const [wallet, setWallet] = useState('');
+  const [wallet, setWallet] = useState(null);
   const [accountCreated, setAccountCreated] = useState('not created');
-  const [data,setData] = useState(null);
 
   
 
   useEffect(() => {
     // Connect to the Socket.IO server
-    console.log('socket:',socket)
-    if (socket){
-      // Send a message to the server on component mount
-      socket.emit('get-subscription-stats');
+    const socket = io('http://127.0.0.1:5000');
+    // setsocket(socket);
 
-      // Handle the server's reply
-      socket.on('subscription-stats', (data) => {
-        // Handle the subscription stats received from the server
-        console.log('Received subscription stats:', data);
-        setSubscriptionStats(data);
-      });
+    // Send a message to the server on component mount
+    socket.emit('get-subscription-stats');
 
-      socket.on('create_userEvent-response', (data) => {
-        console.log('Received create_userEvent response:', data);
-        setData(data)
-        console.log(data)
-        if(data.message){
-          setAccountCreated(data.message);
-        }
-        else{
-          setAccountCreated(data.error);
-        }
-        // Handle the response from the server, e.g., display a message to the user
-      });
-      socket.on('error', (error) => {
-        console.error('Socket error:', error);
-      });
-    }
+    // Handle the server's reply
+    socket.on('subscription-stats', (data) => {
+      // Handle the subscription stats received from the server
+      console.log('Received subscription stats:', data);
+      setSubscriptionStats(data);
+    });
+
+    socket.on('create_userEvent-response', (data) => {
+      console.log('Received create_userEvent response:', data);
+      setAccountCreated(data.message);
+      // Handle the response from the server, e.g., display a message to the user
+    });
+
     // Cleanup the socket connection on component unmount
     return () => {
       // socket.disconnect();
     };
-  }, [socket]); // Empty dependency array means this effect runs once after the initial render
+  }, []); // Empty dependency array means this effect runs once after the initial render
 
   // required_fields = ['unique_id', 'subscription_start_date', 'subscription_end_date', 'number_of_contracts']
   async function handleCreateAccount() {
     const socket = io('http://127.0.0.1:5000');
     
     socket.emit('create_userEvent', {
-      'username': 'testyMctesterFace13456',
-      'email': 'test13456@test.com',
-      'unique_id': 123456,
+      'username': 'testyMctesterFace',
+      'email': 'test@test.com',
+      'unique_id': 1,
       'wallet': wallet,
       'number_of_contracts': 5
     });
-    console.log('create user triggered')
+  
+    // Wait for the server response before updating the state
+    const response = await new Promise(resolve => {
+      socket.on('create_userEvent-response', (data) => {
+        resolve(data);
+        setAccountCreated(data);
+      });
+    });
+  
+    console.log('Server response:', response);
+    setAccountCreated(response.message);
   }
 
   const handleWalletChange = (e) => {
@@ -96,7 +94,6 @@ export default function HomePage() {
         )}
         <button onClick={handleCreateAccount}>Create Account</button>
         <div>{accountCreated}</div>
-        {/* <p>{data}</p> */}
       {/* Other JSX for your component */}
       </header>
     </div>
