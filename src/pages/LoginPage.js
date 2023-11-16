@@ -41,6 +41,8 @@ const LoginPage = ({ onLogin }) => {
       </label>
       <br />
       <button onClick={handleLogin}>Login</button>
+      <br />
+      <button onClick={navigate("/register")}>Register</button>
     </div>
   );
 };

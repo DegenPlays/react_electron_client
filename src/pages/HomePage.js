@@ -9,7 +9,7 @@ export default function HomePage() {
   const [wallet, setWallet] = useState('');
   const [accountCreated, setAccountCreated] = useState('not created');
   const [data,setData] = useState(null);
-  const version = '0.0.0.1'
+  const version = '0.0.0.2'
 
 
   useEffect(() => {
@@ -83,14 +83,14 @@ export default function HomePage() {
         >
           Visit our site for more detailed information
         </a>
-        <p>Version: {version}</p>
+        {/* <p>Version: {version}</p>
         {subscriptionStats ? (
           <p>Subscription Stats: {JSON.stringify(subscriptionStats)}</p>
         ) : (
           <p>Loading subscription stats...</p>
         )}
         <button onClick={handleCreateAccount}>Create Account</button>
-        <div>{accountCreated}</div>
+        <div>{accountCreated}</div> */}
       </header>
     </div>
   );
