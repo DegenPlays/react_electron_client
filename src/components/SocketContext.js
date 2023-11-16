@@ -12,16 +12,15 @@ export const useSocket = () => {
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
-    // const socket = io('http://127.0.0.1:5000');
   useEffect(() => {
-    console.log('creating socket')
-    const newSocket = io('http://127.0.0.1:5000'); // Replace with your server URL
+    const newSocket = io('http://35.166.222.12:5000')//io('http://127.0.0.1:5000'); // Replace with your server URL
     setSocket(newSocket);
 
+    // Cleanup logic on component unmount
     return () => {
       newSocket.disconnect(); // Disconnect the socket when the component unmounts
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs once on mount
 
   return (
     <SocketContext.Provider value={socket}>

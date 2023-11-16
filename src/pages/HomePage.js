@@ -1,33 +1,29 @@
 import logo from '../logo.svg';
 import '../App.css';
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import { useSocket } from '../components/SocketContext'; // Adjust the path
+import { socket } from '../components/socket';
 
 
 export default function HomePage() {
-  const socket = useSocket();
-  // const [socket, setsocket] = useState(null);
   const [subscriptionStats, setSubscriptionStats] = useState(null);
   const [wallet, setWallet] = useState('');
   const [accountCreated, setAccountCreated] = useState('not created');
   const [data,setData] = useState(null);
 
-  
 
   useEffect(() => {
     // Connect to the Socket.IO server
     console.log('socket:',socket)
     if (socket){
       // Send a message to the server on component mount
-      socket.emit('get-subscription-stats');
+      // socket.emit('get-subscription-stats');
 
       // Handle the server's reply
-      socket.on('subscription-stats', (data) => {
-        // Handle the subscription stats received from the server
-        console.log('Received subscription stats:', data);
-        setSubscriptionStats(data);
-      });
+      // socket.on('subscription-stats', (data) => {
+      //   // Handle the subscription stats received from the server
+      //   console.log('Received subscription stats:', data);
+      //   setSubscriptionStats(data);
+      // });
 
       socket.on('create_userEvent-response', (data) => {
         console.log('Received create_userEvent response:', data);
@@ -47,14 +43,13 @@ export default function HomePage() {
     }
     // Cleanup the socket connection on component unmount
     return () => {
+      socket.off('subscription-stats')
+      socket.off('create_userEvent-response')
       // socket.disconnect();
     };
-  }, [socket]); // Empty dependency array means this effect runs once after the initial render
+  }, []); // Empty dependency array means this effect runs once after the initial render
 
-  // required_fields = ['unique_id', 'subscription_start_date', 'subscription_end_date', 'number_of_contracts']
   async function handleCreateAccount() {
-    const socket = io('http://127.0.0.1:5000');
-    
     socket.emit('create_userEvent', {
       'username': 'testyMctesterFace13456',
       'email': 'test13456@test.com',

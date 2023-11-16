@@ -1,35 +1,27 @@
 import logo from '../logo.svg';
 import '../App.css';
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import { socket } from '../components/socket';
 
 
 export default function Register() {
-  // const [socket, setsocket] = useState(null);
-  const [subscriptionStats, setSubscriptionStats] = useState(null);
-  const [wallet, setWallet] = useState(null);
-  const [accountCreated, setAccountCreated] = useState('not created');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [wallet, setWallet] = useState('');
+    const [accountCreated, setAccountCreated] = useState('');
 
   
 
   useEffect(() => {
-    // Connect to the Socket.IO server
-    const socket = io('http://127.0.0.1:5000');
-    // setsocket(socket);
-
-    // Send a message to the server on component mount
-    socket.emit('get-subscription-stats');
-
-    // Handle the server's reply
-    socket.on('subscription-stats', (data) => {
-      // Handle the subscription stats received from the server
-      console.log('Received subscription stats:', data);
-      setSubscriptionStats(data);
-    });
-
     socket.on('create_userEvent-response', (data) => {
       console.log('Received create_userEvent response:', data);
-      setAccountCreated(data.message);
+      console.log('Received create_userEvent response:', data.message);
+      if('message' in data){
+        setAccountCreated(data['message']);
+      }
+      else if('error' in data){
+        setAccountCreated(data['error']);
+      }
       // Handle the response from the server, e.g., display a message to the user
     });
 
@@ -41,34 +33,32 @@ export default function Register() {
 
   // required_fields = ['unique_id', 'subscription_start_date', 'subscription_end_date', 'number_of_contracts']
   async function handleCreateAccount() {
-    const socket = io('http://127.0.0.1:5000');
-    
+    setAccountCreated('Waiting for server...')
     socket.emit('create_userEvent', {
-      'username': 'testyMctesterFace',
-      'email': 'test@test.com',
-      'unique_id': 1,
-      'wallet': wallet,
-      'number_of_contracts': 5
+      'username': username,
+      'password':password,
+      'wallet': wallet
     });
-  
-    // Wait for the server response before updating the state
-    const response = await new Promise(resolve => {
-      socket.on('create_userEvent-response', (data) => {
-        resolve(data);
-        setAccountCreated(data);
-      });
-    });
-  
-    console.log('Server response:', response);
-    setAccountCreated(response.message);
   }
 
-  const handleWalletChange = (e) => {
-    if(e.target.value ==''){
-        return
-    }
-    setWallet(e.target.value);
-};
+    const handleUsernameChange = (e) => {
+        // if(e.target.value ==''){
+        //     return
+        // }
+        setUsername(e.target.value);
+    };
+    const handlePasswordChange = (e) => {
+        // if(e.target.value ==''){
+        //     return
+        // }
+        setPassword(e.target.value);
+    };
+    const handleWalletChange = (e) => {
+        // if(e.target.value ==''){
+        //     return
+        // }
+        setWallet(e.target.value);
+    };
   
   return (
     <div className="App">
@@ -85,13 +75,9 @@ export default function Register() {
         >
           Learn React
         </a>
+        <input type="string" value={username} onChange={handleUsernameChange}/>
+        <input type="password" value={password} onChange={handlePasswordChange}/>
         <input type="string" value={wallet} onChange={handleWalletChange}/>
-        {/* <w3m-button /> */}
-        {subscriptionStats ? (
-          <p>Subscription Stats: {JSON.stringify(subscriptionStats)}</p>
-        ) : (
-          <p>Loading subscription stats...</p>
-        )}
         <button onClick={handleCreateAccount}>Create Account</button>
         <div>{accountCreated}</div>
       {/* Other JSX for your component */}
