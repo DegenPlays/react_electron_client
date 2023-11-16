@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage'; // Import the new Login page
 import Register from './pages/Register'; // Import the new Login page
+import UsersPage from './pages/UsersPage'; // Import the new UsersPage
 import { socket } from './components/socket';
 // import { useNavigate } from 'react-router-dom';
 
@@ -31,6 +32,7 @@ const App = () => {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/users" element={<UsersPage />} />
 
         {/* Protected routes */}
         <Route

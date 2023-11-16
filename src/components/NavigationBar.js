@@ -15,6 +15,9 @@ const NavigationBar = ({ user, onLogout }) => {
         <li className="nav-item">
             <Link to="/register">Register</Link>
         </li>
+        <li className="nav-item">
+            <Link to="/users">Users</Link>
+        </li>
         <div>
         {/* Other navigation items */}
         {user ? (

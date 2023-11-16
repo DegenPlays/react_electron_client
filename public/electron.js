@@ -7,6 +7,11 @@ const {Tray, Menu } = require('electron');
 const { autoUpdater } = require('electron-updater');
 
 autoUpdater.autoDownload = false; // Disable auto download, we'll handle it manually
+autoUpdater.setFeedURL({
+  "provider": "github",
+  "owner": "DegenPlays",
+  "repo": "react_electron_client"
+})
 
 
 let mainWindow;
@@ -85,6 +90,7 @@ app.on('activate', () => {
 });
 
 function checkForUpdates() {
+  console.log('checking for updates')
   autoUpdater.checkForUpdates();
 
   autoUpdater.on('update-available', () => {

@@ -9,6 +9,7 @@ export default function HomePage() {
   const [wallet, setWallet] = useState('');
   const [accountCreated, setAccountCreated] = useState('not created');
   const [data,setData] = useState(null);
+  const version = '0.0.0.1'
 
 
   useEffect(() => {
@@ -72,18 +73,17 @@ export default function HomePage() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+         Welcome to DegenPlays Automation
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://degenplays.club/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Visit our site for more detailed information
         </a>
-        <input type="string" value={wallet} onChange={handleWalletChange}/>
-        {/* <w3m-button /> */}
+        <p>Version: {version}</p>
         {subscriptionStats ? (
           <p>Subscription Stats: {JSON.stringify(subscriptionStats)}</p>
         ) : (
@@ -91,8 +91,6 @@ export default function HomePage() {
         )}
         <button onClick={handleCreateAccount}>Create Account</button>
         <div>{accountCreated}</div>
-        {/* <p>{data}</p> */}
-      {/* Other JSX for your component */}
       </header>
     </div>
   );
