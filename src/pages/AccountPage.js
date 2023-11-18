@@ -1,8 +1,9 @@
-// UsersPage.js
+// AccountPage.js
 import React, { useEffect, useState } from 'react';
 import { socket } from '../components/socket';
-// import CryptoJS from 'crypto-js';
+import CryptoJS from 'crypto-js';
 import config from '../config';
+import appStore from '../components/store';
 // import fs from 'fs-extra'; // Import fs-extra instead of fs
 const path = require("path");
 // const fs = require('fs');
@@ -10,30 +11,28 @@ const path = require("path");
 const encryptionKey = config.REACT_APP_ENCRYPTION_KEY;
 
 const AccountPage = ({user}) => {
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
+  const [usernameInput, setUsername] = useState('');
+  const [passwordInput, setPassword] = useState('');
 
-  // const handleUsernameChange = (e) => {
-  //     setUsername(e.target.value);
-  // };
-  // const handlePasswordChange = (e) => {
-  //     setPassword(e.target.value);
-  // };
+  const handleUsernameChange = (e) => {
+      setUsername(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+      setPassword(e.target.value);
+  };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
-  //   const cipherUsername = CryptoJS.AES.encrypt(username, encryptionKey).toString();
-  //   const cipherPassword = CryptoJS.AES.encrypt(password, encryptionKey).toString();
-  //   const login = {'username':cipherUsername,'password':cipherPassword}
+    const cipherUsername = CryptoJS.AES.encrypt(usernameInput, encryptionKey).toString();
+    const cipherPassword = CryptoJS.AES.encrypt(passwordInput, encryptionKey).toString();
     
-  //   const filePath = path.join(__dirname, './automations/quopiId.json');
-
-  //   // Ensure that the directory exists before writing the file
-  //   fs.ensureDirSync(path.dirname(filePath));
-
-  //   fs.writeFileSync(path.join(__dirname, './automations/quopiId.json'), JSON.stringify(login, null, 2));
-  // };
+    try{
+      await appStore.addItemToStore({ quopi: {username: cipherUsername, password: cipherPassword} });
+    }catch{
+      console.log('Saving Login failed')
+    }
+  };
 
   return (
     <div className="App">
@@ -72,22 +71,22 @@ const AccountPage = ({user}) => {
             </table>
           </>
         }
-        {/* <h3>Quopi account info</h3>
+        <h3>Quopi account info</h3>
         <form onSubmit={handleSubmit}>
           <label>
             Username: 
-          <input type="string" value={username} onChange={handleUsernameChange}/>
+          <input type="string" value={usernameInput} onChange={handleUsernameChange}/>
           </label>
           <br/>
           <label>
             Password: 
-          <input type="password" value={password} onChange={handlePasswordChange}/>
+          <input type="password" value={passwordInput} onChange={handlePasswordChange}/>
           </label>
           <br/>
           <br />
           <button type="submit">Save</button>
           <br />
-        </form> */}
+        </form>
         </div>
     </div>
   );

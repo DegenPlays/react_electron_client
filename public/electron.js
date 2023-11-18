@@ -5,8 +5,11 @@ const path = require("path");
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const {Tray, Menu } = require('electron');
+const {Tray, Menu, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const Store = require('electron-store');
+
+const store = new Store();
 
 autoUpdater.autoDownload = false; // Disable auto download, we'll handle it manually
 autoUpdater.setFeedURL({
@@ -19,6 +22,7 @@ let mainWindow;
 let tray;
 
 function createWindow() {
+  console.log('userData:',app.getPath('userData'));
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1000,
@@ -144,3 +148,17 @@ function checkForUpdates() {
     });
   });
 }
+// Expose store to renderer process
+ipcMain.handle('getStore', () => {
+  return store.store;
+});
+
+// Handle the request to add an item to the store
+ipcMain.handle('addItemToStore', (event, newItem) => {
+  console.log('newItem:',newItem)
+  // store.set(Object.keys(newItem),newItem[Object.keys(newItem)]);
+  store.set(newItem);
+  console.log(`${Object.keys(newItem)}:`,store.get(Object.keys(newItem)));
+  console.log(`store:`,store.store);
+  return store.store;
+});
