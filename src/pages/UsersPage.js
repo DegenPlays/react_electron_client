@@ -21,28 +21,30 @@ const UsersPage = () => {
   }, []);
 
   return (
-    <div>
-      <h2>User Table</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            {/* Add more columns as needed */}
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
+    <div className="App">
+      <header className="App-header">
+        <h2>User Table</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
               {/* Add more columns as needed */}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                {/* Add more columns as needed */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </header>
     </div>
   );
 };

@@ -1,0 +1,7 @@
+
+    // "@craco/craco": "^7.1.0",
+    // "chromedriver": "^119.0.1",
+    // "crypto-js": "^4.2.0",
+    // "fs-extra": "^11.1.1",
+    // "wdio-electron-service": "^5.4.0",
+    // "webdriverio": "^8.23.1"

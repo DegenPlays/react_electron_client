@@ -1,5 +1,4 @@
 import logo from '../logo.svg';
-import '../App.css';
 import React, { useEffect, useState } from 'react';
 import { socket } from '../components/socket';
 
@@ -22,17 +21,15 @@ export default function Register() {
       else if('error' in data){
         setAccountCreated(data['error']);
       }
-      // Handle the response from the server, e.g., display a message to the user
     });
 
-    // Cleanup the socket connection on component unmount
     return () => {
-      // socket.disconnect();
+      socket.off('create_userEvent-response');
     };
   }, []); // Empty dependency array means this effect runs once after the initial render
 
   // required_fields = ['unique_id', 'subscription_start_date', 'subscription_end_date', 'number_of_contracts']
-  async function handleCreateAccount() {
+  function handleCreateAccount() {
     setAccountCreated('Waiting for server...')
     socket.emit('create_userEvent', {
       'username': username,
@@ -42,23 +39,20 @@ export default function Register() {
   }
 
     const handleUsernameChange = (e) => {
-        // if(e.target.value ==''){
-        //     return
-        // }
         setUsername(e.target.value);
     };
     const handlePasswordChange = (e) => {
-        // if(e.target.value ==''){
-        //     return
-        // }
         setPassword(e.target.value);
     };
     const handleWalletChange = (e) => {
-        // if(e.target.value ==''){
-        //     return
-        // }
         setWallet(e.target.value);
     };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      handleCreateAccount();
+    };
+  
   
   return (
     <div className="App">
@@ -75,12 +69,25 @@ export default function Register() {
         >
           Learn React
         </a>
-        <input type="string" value={username} onChange={handleUsernameChange}/>
-        <input type="password" value={password} onChange={handlePasswordChange}/>
-        <input type="string" value={wallet} onChange={handleWalletChange}/>
-        <button onClick={handleCreateAccount}>Create Account</button>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Username: 
+          <input type="string" value={username} onChange={handleUsernameChange}/>
+          </label>
+          <br/>
+          <label>
+            Password: 
+          <input type="password" value={password} onChange={handlePasswordChange}/>
+          </label>
+          <br/>
+          <label>
+            Wallet: 
+          <input type="string" value={wallet} onChange={handleWalletChange}/>
+          </label>
+          <br/>
+          <button type="submit">Create Account</button>
+        </form>
         <div>{accountCreated}</div>
-      {/* Other JSX for your component */}
       </header>
     </div>
   );

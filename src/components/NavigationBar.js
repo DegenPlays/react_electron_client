@@ -9,17 +9,37 @@ const NavigationBar = ({ user, onLogout }) => {
         <li className="nav-item">
             <Link to="/">Home</Link>
         </li>
-        <li className="nav-item">
-            <Link to="/settings">Settings</Link>
-        </li>
-        <li className="nav-item">
+        
+        {user && (
+          <>
+            <li className="nav-item">
+                <Link to="/userAutomation">Manage Automations</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/chat">Chat</Link>
+            </li>
+            <li className="nav-item">
+                <Link to="/settings">Settings</Link>
+            </li>
+            <li className="nav-item">
+                <Link to="/projectBid">Project Bidding</Link>
+            </li>
+            <li className="nav-item">
+                <Link to="/account">Account</Link>
+            </li>
+          </>
+        )}
+        {/* <li className="nav-item">
             <Link to="/register">Register</Link>
-        </li>
+        </li> */}
         <li className="nav-item">
             <Link to="/users">Users</Link>
         </li>
+        <li className="nav-item">
+            <Link to="/disclaimer">Disclaimer</Link>
+        </li>
+        <li className="nav-item">
         <div>
-        {/* Other navigation items */}
         {user ? (
             <button onClick={onLogout}>Logout</button>
         ) : (
@@ -27,6 +47,7 @@ const NavigationBar = ({ user, onLogout }) => {
         )}
         </div>
         {/* Add more navigation links for additional pages */}
+        </li>
       </ul>
     </nav>
   );

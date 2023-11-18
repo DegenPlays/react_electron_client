@@ -9,14 +9,21 @@ const LoginPage = ({ onLogin }) => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    socket.on('login_status', (data) => {
-      if(data['status'] == 'success'){
-        const user = data['user']
-        console.log(user)
+    const handleLoginStatus = (data) => {
+      if (data.status === 'success') {
+        const user = data.user;
+        console.log('login user', user);
         onLogin(user);
-        navigate("/"); // Redirect to the Settings page after successful login
+        navigate('/'); // Redirect to the Settings page after successful login
       }
-    })
+    };
+
+    socket.on('login_status', handleLoginStatus);
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      socket.off('login_status', handleLoginStatus);
+    };
   });
 
   const handleLogin = async () => {
@@ -27,22 +34,37 @@ const LoginPage = ({ onLogin }) => {
     // });
   };
 
+  const handleRegister = () => {
+    navigate("/register")
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleLogin();
+  };
+
   return (
-    <div>
-      <h2>Login</h2>
-      <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <br />
-      <button onClick={handleLogin}>Login</button>
-      <br />
-      <button onClick={navigate("/register")}>Register</button>
+    <div className="App">
+    <header className="App-header">
+      <div>
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Username:
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </label>
+          <br />
+          <label>
+            Password:
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </label>
+          <br />
+          <button onClick={handleLogin}>Login</button>
+          <br />
+        </form>
+        <button onClick={handleRegister}>Register</button>
+      </div>
+      </header>
     </div>
   );
 };
