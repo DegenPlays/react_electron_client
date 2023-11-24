@@ -39,14 +39,14 @@ const NavigationBar = ({ user, onLogout }) => {
             <Link to="/disclaimer">Disclaimer</Link>
         </li>
         <li className="nav-item">
-        <div>
-        {user ? (
-            <button onClick={onLogout}>Logout</button>
-        ) : (
-            <Link to="/login">Login</Link>
-        )}
-        </div>
-        {/* Add more navigation links for additional pages */}
+          <div>
+          {user ? (
+              <button onClick={onLogout}>Logout</button>
+          ) : (
+              <Link to="/login">Login</Link>
+          )}
+          </div>
+          {/* Add more navigation links for additional pages */}
         </li>
       </ul>
     </nav>

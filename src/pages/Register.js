@@ -1,13 +1,14 @@
 import logo from '../logo.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useId } from 'react';
 import { socket } from '../components/socket';
-
+import config from '../config';
 
 export default function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [wallet, setWallet] = useState('');
     const [accountCreated, setAccountCreated] = useState('');
+    const passwordHintId = useId();
 
   
 
@@ -77,7 +78,10 @@ export default function Register() {
           <br/>
           <label>
             Password: 
-          <input type="password" value={password} onChange={handlePasswordChange}/>
+            <input type="password" value={password} onChange={handlePasswordChange} aria-describedby={passwordHintId} />
+            <p id={passwordHintId}>
+              The password should contain at least 18 characters
+            </p>
           </label>
           <br/>
           <label>

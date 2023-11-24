@@ -1,6 +1,6 @@
 {
-  "name": "react_electron_client",
-  "version": "0.0.2",
+  "name": "degenplays_automation",
+  "version": "0.0.3",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "chromedriver": "^119.0.1",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.3.1",
     "electron-store": "^8.1.0",
@@ -26,12 +27,17 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build": "craco build",
-    "start": "electron ."
+    "start": "electron .",
+    "deploy": "node scripts/prebuild.js && npm run build && npx electron-builder build",
+    "dev": "craco build &&  electron ."
   },
   "build": {
     "files": [
       ".env"
     ],
+    "win": {
+      "target": "nsis"
+    },
     "publish": [
       {
         "provider": "github",
@@ -40,7 +46,44 @@
       }
     ],
     "appId": "club.degenplays.DegenAutomation",
-    "asar": true
+    "asar": true,
+    "extraFiles": [
+      {
+        "from": "./src/automations",
+        "to": "automations",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+         "from": "./node_modules/tmp",
+         "to": "node_modules/tmp",
+         "filter": [
+            "**/*"
+         ]
+      },
+      {
+         "from": "./node_modules/jszip",
+         "to": "node_modules/jszip",
+         "filter": [
+            "**/*"
+         ]
+      },
+      {
+         "from": "./node_modules/pako",
+         "to": "node_modules/pako",
+         "filter": [
+            "**/*"
+         ]
+      },
+      {
+         "from": "./node_modules/crypto-js",
+         "to": "node_modules/crypto-js",
+         "filter": [
+            "**/*"
+         ]
+      }
+    ]
   },
   "eslintConfig": {
     "extends": [

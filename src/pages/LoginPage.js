@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../components/socket';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -27,11 +28,7 @@ const LoginPage = ({ onLogin }) => {
   });
 
   const handleLogin = async () => {
-    socket.emit('login', { username, password })//, (user) => {
-      // Assuming the server sends the user object upon successful login
-    //   console.log(user)
-    //   onLogin(user);
-    // });
+    socket.emit('login', { username, password})
   };
 
   const handleRegister = () => {
@@ -59,7 +56,7 @@ const LoginPage = ({ onLogin }) => {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </label>
           <br />
-          <button onClick={handleLogin}>Login</button>
+          <button type="submit">Login</button>
           <br />
         </form>
         <button onClick={handleRegister}>Register</button>

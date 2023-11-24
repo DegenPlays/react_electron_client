@@ -5,3 +5,25 @@
     // "fs-extra": "^11.1.1",
     // "wdio-electron-service": "^5.4.0",
     // "webdriverio": "^8.23.1"
+
+
+REACT_APP_ENVIROMENT=test
+REACT_APP_ENCRYPTION_KEY=your_secret_key_here
+REACT_APP_SERVER_ADDRESS=http://127.0.0.1:5000
+
+
+      {
+        "from": "./node_modules/chromedriver",
+        "to": "automations/chromedriver",
+        "filter": [
+          "**/*"
+        ]
+      },
+      ,
+      {
+        "from": "./node_modules",
+        "to": "node_modules",
+        "filter": [
+          "**/*"
+        ]
+      }

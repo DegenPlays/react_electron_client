@@ -13,6 +13,8 @@ const encryptionKey = config.REACT_APP_ENCRYPTION_KEY;
 const AccountPage = ({user}) => {
   const [usernameInput, setUsername] = useState('');
   const [passwordInput, setPassword] = useState('');
+  const [aacusernameInput, setaacUsername] = useState('');
+  const [aacpasswordInput, setaacPassword] = useState('');
 
   const handleUsernameChange = (e) => {
       setUsername(e.target.value);
@@ -28,9 +30,36 @@ const AccountPage = ({user}) => {
     const cipherPassword = CryptoJS.AES.encrypt(passwordInput, encryptionKey).toString();
     
     try{
-      await appStore.addItemToStore({ quopi: {username: cipherUsername, password: cipherPassword} });
+      await appStore.addItemToStore({ quopi_login: {username: cipherUsername, password: cipherPassword} });
+      console.log('Login Saved')
+      const login = await appStore.fetchItem('quopi_login')
+      console.log('login:',login)
+      const store = await appStore.fetchStore()
+      console.log('store:',store)
     }catch{
-      console.log('Saving Login failed')
+      console.log('Failed Saving Login')
+    }
+  };
+  const handleaacUsernameChange = (e) => {
+    setaacUsername(e.target.value);
+  };
+  const handleaacPasswordChange = (e) => {
+      setaacPassword(e.target.value);
+  };
+
+  const handleaacSubmit = async (e) => {
+    e.preventDefault();
+    
+    const cipherUsername = CryptoJS.AES.encrypt(aacusernameInput, encryptionKey).toString();
+    const cipherPassword = CryptoJS.AES.encrypt(aacpasswordInput, encryptionKey).toString();
+    
+    try{
+      await appStore.addItemToStore({ aac_login: {username: cipherUsername, password: cipherPassword} });
+      console.log('Login Saved')
+      const login = await appStore.fetchItem('quopi_login')
+      console.log('login:',login)
+    }catch{
+      console.log('Failed Saving Login')
     }
   };
 
@@ -87,7 +116,22 @@ const AccountPage = ({user}) => {
           <button type="submit">Save</button>
           <br />
         </form>
-        </div>
+        <form onSubmit={handleaacSubmit}>
+          <label>
+            Username: 
+          <input type="string" value={aacusernameInput} onChange={handleaacUsernameChange}/>
+          </label>
+          <br/>
+          <label>
+            Password: 
+          <input type="password" value={aacpasswordInput} onChange={handleaacPasswordChange}/>
+          </label>
+          <br/>
+          <br />
+          <button type="submit">Save</button>
+          <br />
+        </form>
+      </div>
     </div>
   );
 };

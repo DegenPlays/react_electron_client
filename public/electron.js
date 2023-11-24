@@ -5,7 +5,7 @@ const path = require("path");
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const {Tray, Menu, ipcMain } = require('electron');
+const {Tray, Menu, ipcMain,dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const Store = require('electron-store');
 
@@ -25,7 +25,7 @@ function createWindow() {
   console.log('userData:',app.getPath('userData'));
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1000,
+    width: 1200,
     height: 800,
     webPreferences: { nodeIntegration: true, contextIsolation: false },
   });
@@ -71,7 +71,18 @@ function createWindow() {
     // When the window gains focus, show it
     mainWindow.show();
   });
-
+  // Handle IPC message from renderer process
+  ipcMain.on('show-message-box', (event, { type, title, message }) => {
+    if (type === 'info') {
+      dialog.showMessageBoxSync(mainWindow, {
+        type: 'info',
+        title,
+        message,
+      });
+    } else if (type === 'error') {
+      dialog.showErrorBox(title, message);
+    }
+  });
   // triggerSeleniumScript();
 }
 
@@ -148,9 +159,23 @@ function checkForUpdates() {
     });
   });
 }
+
+function runTests() {
+  ipcRenderer.send('run-selenium-tests');
+}
+
 // Expose store to renderer process
 ipcMain.handle('getStore', () => {
   return store.store;
+});
+
+// Expose store to renderer process
+ipcMain.handle('getItem', (event,itemKey) => {
+  console.log('itemKey:',itemKey)
+  const item = store.get(itemKey)
+  console.log("fetched ITem:",item);
+  // return store.get(key);
+  return item;
 });
 
 // Handle the request to add an item to the store
